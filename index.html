@@ -1,46 +1,246 @@
 
-<script>
-const form = document.getElementById('jobForm');
-const msg = document.getElementById('message');
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10131d">
+  <title>Nasri Subtitle Studio</title>
+  <style>
+    * { box-sizing: border-box; }
 
-const engineUrl = 'https://2645a59ce8dbc3143e.gradio.live';
-
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
-
-  const url = document.getElementById('movieUrl').value.trim();
-  const file = document.getElementById('srtFile').files[0];
-  const rights = document.getElementById('rights').checked;
-
-  try {
-    const parsed = new URL(url);
-    if (!['http:', 'https:'].includes(parsed.protocol)) {
-      throw new Error();
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 24px 14px;
+      background: #10131d;
+      color: #f4f5fb;
+      font-family: system-ui, Arial, sans-serif;
     }
-  } catch {
-    msg.textContent =
-      'تحقق من رابط الفيلم. يجب أن يبدأ بـ https:// أو http://';
-    msg.className = 'notice warning';
-    return;
-  }
 
-  if (!file || !file.name.toLowerCase().endsWith('.srt')) {
-    msg.textContent = 'اختر ملف ترجمة بامتداد SRT.';
-    msg.className = 'notice warning';
-    return;
-  }
+    main {
+      width: 100%;
+      max-width: 650px;
+      margin: 25px auto;
+      padding: 25px;
+      background: #191e2c;
+      border: 1px solid #30384c;
+      border-radius: 18px;
+    }
 
-  if (!rights) {
-    msg.textContent = 'يرجى تأكيد حقك في معالجة الفيديو.';
-    msg.className = 'notice warning';
-    return;
-  }
+    h1 {
+      margin-top: 0;
+      text-align: center;
+      font-size: 27px;
+    }
 
-  msg.textContent =
-    'سيتم فتح محرك المعالجة. أدخل رابط الفيلم وارفع ملف SRT مرة أخرى في واجهة المحرك.';
+    .intro {
+      text-align: center;
+      color: #b8c1d8;
+      line-height: 1.8;
+    }
 
-  msg.className = 'notice';
+    label {
+      display: block;
+      margin: 19px 0 8px;
+      font-weight: 600;
+    }
 
-  window.open(engineUrl, '_blank', 'noopener');
-});
-</script>
+    input[type="url"],
+    input[type="text"],
+    input[type="file"] {
+      display: block;
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #424d67;
+      border-radius: 10px;
+      background: #101522;
+      color: #fff;
+      font: inherit;
+    }
+
+    .rights {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin: 20px 0;
+      color: #d4d9e7;
+      line-height: 1.7;
+      font-weight: normal;
+    }
+
+    .rights input { margin-top: 7px; }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      border: 0;
+      border-radius: 10px;
+      background: #7164f3;
+      color: white;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: .6;
+      cursor: wait;
+    }
+
+    .notice {
+      display: none;
+      margin-top: 18px;
+      padding: 13px;
+      border-radius: 10px;
+      line-height: 1.7;
+      overflow-wrap: anywhere;
+      background: #242d40;
+    }
+
+    .notice.show { display: block; }
+    .warning { color: #ffd18b; }
+    .success { color: #a6f0c0; }
+
+    .features {
+      margin-top: 24px;
+      color: #b8c1d8;
+      line-height: 2;
+      font-size: 14px;
+    }
+
+    footer {
+      margin-top: 24px;
+      text-align: center;
+      color: #8993aa;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>🎬 Nasri Subtitle Studio</h1>
+
+    <p class="intro">
+      أضف ترجمة عربية إلى الفيلم كمسار مستقل داخل MKV،
+      دون حرق الترجمة على الصورة ودون إعادة ترميز الفيديو والصوت متى أمكن.
+    </p>
+
+    <form id="jobForm">
+      <label for="movieUrl">رابط الفيديو المباشر</label>
+      <input
+        id="movieUrl"
+        type="url"
+        placeholder="https://example.com/movie.mp4"
+        required
+      >
+
+      <label for="srtFile">ملف الترجمة العربية SRT</label>
+      <input
+        id="srtFile"
+        type="file"
+        accept=".srt,application/x-subrip"
+        required
+      >
+
+      <label for="outputName">اسم الملف الناتج</label>
+      <input
+        id="outputName"
+        type="text"
+        value="Nasri_Subtitle_Studio"
+        maxlength="90"
+        required
+      >
+
+      <label class="rights">
+        <input id="rights" type="checkbox" required>
+        <span>أؤكد أن لدي الحق في معالجة الفيديو وملف الترجمة.</span>
+      </label>
+
+      <button id="submitBtn" type="submit">
+        🎬 تجهيز الفيلم مع الترجمة
+      </button>
+
+      <div id="message" class="notice" role="status" aria-live="polite"></div>
+    </form>
+
+    <div class="features">
+      ✓ الترجمة مسار مستقل قابل للتشغيل والإيقاف.<br>
+      ✓ إخراج بصيغة MKV.<br>
+      ✓ نسخ الفيديو والصوت دون إعادة ترميز متى أمكن.
+    </div>
+
+    <footer>
+      Nasri Subtitle Studio · استخدم روابط وملفات تملك حق معالجتها.
+    </footer>
+  </main>
+
+  <script>
+    const form = document.getElementById('jobForm');
+    const msg = document.getElementById('message');
+    const button = document.getElementById('submitBtn');
+
+    const engineUrl =
+      'https://e7bb494326866e292b.gradio.live/';
+
+    function showMessage(text, type = '') {
+      msg.textContent = text;
+      msg.className = 'notice show ' + type;
+    }
+
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      const url = document.getElementById('movieUrl').value.trim();
+      const file = document.getElementById('srtFile').files[0];
+      const name = document.getElementById('outputName').value.trim();
+      const rights = document.getElementById('rights').checked;
+
+      let parsedUrl;
+
+      try {
+        parsedUrl = new URL(url);
+      } catch {
+        showMessage('تحقق من رابط الفيديو.', 'warning');
+        return;
+      }
+
+      if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
+        showMessage('يجب أن يبدأ الرابط بـ https:// أو http://', 'warning');
+        return;
+      }
+
+      if (!file || !file.name.toLowerCase().endsWith('.srt')) {
+        showMessage('اختر ملف ترجمة بامتداد SRT.', 'warning');
+        return;
+      }
+
+      if (!name) {
+        showMessage('اكتب اسم الملف الناتج.', 'warning');
+        return;
+      }
+
+      if (!rights) {
+        showMessage('يرجى تأكيد حقك في معالجة الفيديو.', 'warning');
+        return;
+      }
+
+      const engineWindow = window.open(engineUrl, '_blank');
+
+      if (!engineWindow) {
+        showMessage(
+          'منع المتصفح فتح المحرك. اسمح بفتح النوافذ المنبثقة ثم حاول مجددًا.',
+          'warning'
+        );
+        return;
+      }
+
+      showMessage(
+        'تم فتح محرك المعالجة. أدخل رابط الفيديو وارفع ملف SRT داخله؛ ' +
+        'الموقع لا يرسل الملفات تلقائيًا في هذه النسخة.',
+        'success'
+      );
+    });
+  </script>
+</body>
+</html>
