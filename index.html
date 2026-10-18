@@ -1,78 +1,46 @@
-<!doctype html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0b1020">
-<title>Nasri Subtitle Studio</title>
-<style>
-:root{color-scheme:dark;--bg:#0b1020;--panel:#121a2d;--line:#27334c;--muted:#a8b4ca;--text:#f4f7ff;--blue:#60a5fa;--cyan:#67e8f9}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 85% 0%,#17284b 0,transparent 35%),var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.65}
-main{width:min(760px,100%);margin:auto;padding:28px 16px 48px}.brand{display:flex;align-items:center;gap:13px;margin-bottom:24px}.logo{display:grid;place-items:center;width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#67e8f9,#60a5fa);color:#081224;font-size:26px;font-weight:900}.brand h1{font-size:clamp(22px,5vw,30px);margin:0}.brand p{margin:2px 0 0;color:var(--muted);font-size:14px}
-.card{background:rgba(18,26,45,.94);border:1px solid var(--line);border-radius:22px;padding:clamp(18px,4vw,28px);box-shadow:0 20px 70px #0003}.intro h2{font-size:21px;margin:0 0 8px}.intro p{color:var(--muted);margin:0 0 22px}.field{margin:18px 0}.field label{display:block;font-weight:700;margin-bottom:8px}.hint{font-size:13px;color:var(--muted);margin-top:6px}input[type=url],input[type=text]{width:100%;padding:14px 13px;border:1px solid #394965;border-radius:12px;background:#0a1120;color:var(--text);font:inherit;direction:ltr;text-align:left}input:focus{outline:2px solid var(--blue);border-color:transparent}.upload{border:1px dashed #50627f;border-radius:15px;padding:18px;background:#0d1527}.upload input{max-width:100%;width:100%;margin-top:10px}.check{display:flex;gap:10px;align-items:flex-start;color:var(--muted);font-size:14px}.check input{margin-top:7px;accent-color:var(--blue)}button,.button{border:0;border-radius:13px;padding:13px 18px;font:inherit;font-weight:750;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}.primary{width:100%;background:linear-gradient(100deg,#60a5fa,#67e8f9);color:#071225;margin-top:20px}.secondary{background:#1b2943;color:var(--text);border:1px solid #33435f}.notice{padding:14px 15px;border-radius:13px;background:#102a3d;border:1px solid #23536a;color:#d8f7ff;font-size:14px;margin-top:18px}.warning{background:#332718;border-color:#6c4d22;color:#ffebc5}.steps{display:grid;gap:12px;margin-top:20px}.step{display:flex;gap:12px;align-items:flex-start}.num{flex:0 0 30px;height:30px;display:grid;place-items:center;border-radius:10px;background:#1b3555;color:#a8dcff;font-weight:800}.step p{margin:0;color:var(--muted);font-size:14px}.step b{color:var(--text)}footer{text-align:center;color:var(--muted);font-size:12px;margin-top:22px}a{color:#9bdcff} .small{font-size:12px;color:var(--muted)}
-</style>
-</head>
-<body>
-<main>
-  <header class="brand">
-    <div class="logo">N</div>
-    <div><h1>Nasri Subtitle Studio</h1><p>إضافة ترجمة عربية إلى الفيلم دون حرقها على الصورة</p></div>
-  </header>
-  <section class="card intro">
-    <h2>أضف مسار ترجمة إلى فيلمك</h2>
-    <p>أدخل رابط تنزيل مباشر للفيلم وارفع ملف SRT. الناتج المطلوب MKV مع مسار ترجمة يمكن تشغيله وإيقافه من المشغّل.</p>
-    <form id="jobForm">
-      <div class="field">
-        <label for="movieUrl">رابط الفيلم المباشر</label>
-        <input id="movieUrl" type="url" placeholder="https://example.com/movie.mp4" required>
-        <div class="hint">يجب أن يكون رابط ملف مباشرًا، لا رابط صفحة مشاهدة أو رابطًا يتطلب تسجيل الدخول.</div>
-      </div>
-      <div class="field">
-        <label for="srtFile">ملف الترجمة SRT</label>
-        <div class="upload"><div>📄 اختر ملف الترجمة من هاتفك</div><input id="srtFile" type="file" accept=".srt,application/x-subrip" required><div class="hint">يفضّل أن يكون الملف بترميز UTF-8.</div></div>
-      </div>
-      <div class="field">
-        <label for="outputName">اسم الملف الناتج (اختياري)</label>
-        <input id="outputName" type="text" value="Nasri_Subtitle_Studio" maxlength="90" dir="auto">
-      </div>
-      <label class="check"><input id="rights" type="checkbox" required><span>أؤكد أن لدي الحق في الوصول إلى ملف الفيديو ومعالجته.</span></label>
-      <button class="primary" type="submit">🎬 تجهيز الفيلم مع الترجمة</button>
-    </form>
-    <div id="message" class="notice warning" role="status">واجهة الموقع جاهزة، لكن خدمة معالجة الفيديو لم تُربط بعد. GitHub Pages يعرض الموقع فقط ولا يستطيع وحده تنزيل الأفلام وتشغيل FFmpeg.</div>
-  </section>
-  <section class="card" style="margin-top:16px">
-    <h2 style="margin-top:0;font-size:19px">كيف سيعمل الإصدار الكامل؟</h2>
-    <div class="steps">
-      <div class="step"><span class="num">1</span><p><b>تنزيل الفيلم</b><br>من رابط مباشر يدعم التنزيل، مع إظهار التقدم والأخطاء.</p></div>
-      <div class="step"><span class="num">2</span><p><b>إضافة الترجمة</b><br>نسخ مسارات الفيديو والصوت دون إعادة ترميز، وإضافة SRT كمسار منفصل داخل MKV.</p></div>
-      <div class="step"><span class="num">3</span><p><b>تنزيل الناتج</b><br>توفير ملف MKV بعد انتهاء المعالجة وقبل انتهاء جلسة الخادم.</p></div>
-    </div>
-    <div class="notice">الاستضافة المقترحة: GitHub Pages لهذه الواجهة، مع خدمة معالجة منفصلة. يمكن تجربة المعالجة مجانًا عبر Google Colab، لكن جلسة Colab ورابطها مؤقتان ولا يعملان كخادم دائم.</div>
-    <p class="small">لا تدخل روابط خاصة أو تحتوي على بيانات دخول. لا تضع مفاتيح API أو كلمات مرور داخل ملفات الموقع العامة.</p>
-  </section>
-  <footer>Nasri Subtitle Studio · مشروع شخصي</footer>
-</main>
+
 <script>
-const form=document.getElementById('jobForm');
-const msg=document.getElementById('message');
-form.addEventListener('submit',e=>{
+const form = document.getElementById('jobForm');
+const msg = document.getElementById('message');
+
+const engineUrl = 'https://2645a59ce8dbc3143e.gradio.live';
+
+form.addEventListener('submit', (e) => {
   e.preventDefault();
-  const url=document.getElementById('movieUrl').value.trim();
-  const file=document.getElementById('srtFile').files[0];
-  try{
-    const parsed=new URL(url);
-    if(!['http:','https:'].includes(parsed.protocol)) throw new Error();
-  }catch{
-    msg.textContent='تحقق من رابط الفيلم. يجب أن يبدأ بـ https:// أو http://';
-    msg.className='notice warning';return;
+
+  const url = document.getElementById('movieUrl').value.trim();
+  const file = document.getElementById('srtFile').files[0];
+  const rights = document.getElementById('rights').checked;
+
+  try {
+    const parsed = new URL(url);
+    if (!['http:', 'https:'].includes(parsed.protocol)) {
+      throw new Error();
+    }
+  } catch {
+    msg.textContent =
+      'تحقق من رابط الفيلم. يجب أن يبدأ بـ https:// أو http://';
+    msg.className = 'notice warning';
+    return;
   }
-  if(!file || !file.name.toLowerCase().endsWith('.srt')){
-    msg.textContent='اختر ملف ترجمة بامتداد SRT.';
-    msg.className='notice warning';return;
+
+  if (!file || !file.name.toLowerCase().endsWith('.srt')) {
+    msg.textContent = 'اختر ملف ترجمة بامتداد SRT.';
+    msg.className = 'notice warning';
+    return;
   }
-  msg.textContent='تم التحقق من المدخلات محليًا، لكن الدمج الفعلي غير متاح بعد لأن خدمة المعالجة لم تُربط بهذه الواجهة. لن يتم رفع الفيلم أو ملف الترجمة من هذه الصفحة.';
-  msg.className='notice warning';
+
+  if (!rights) {
+    msg.textContent = 'يرجى تأكيد حقك في معالجة الفيديو.';
+    msg.className = 'notice warning';
+    return;
+  }
+
+  msg.textContent =
+    'سيتم فتح محرك المعالجة. أدخل رابط الفيلم وارفع ملف SRT مرة أخرى في واجهة المحرك.';
+
+  msg.className = 'notice';
+
+  window.open(engineUrl, '_blank', 'noopener');
 });
 </script>
-</body>
-</html>
